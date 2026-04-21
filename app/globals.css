@@ -1,0 +1,166 @@
+@import "tailwindcss";
+
+@theme {
+  /* "gold" token kept as the project's accent name — values are now violet→pink */
+  --color-gold: #a78bfa;
+  --color-gold-soft: rgba(167, 139, 250, 0.12);
+  --color-accent: #8b5cf6;
+  --color-accent-2: #ec4899;
+  --color-bg: #06060c;
+  --color-panel: #0d0d18;
+  --color-panel-2: #14142a;
+  --color-border: #1f1f33;
+  --color-muted: #9b9bb3;
+  --color-text: #ececf6;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-muted);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(139, 92, 246, 0.4);
+  color: var(--color-text);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+}
+
+.glass {
+  background: linear-gradient(
+    145deg,
+    rgba(20, 20, 42, 0.75),
+    rgba(13, 13, 24, 0.78)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Opt-in blurred variant — use sparingly for perf */
+.glass-blur {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.heading-line {
+  position: relative;
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-accent-2));
+  border-radius: 2px;
+  overflow: hidden;
+}
+.heading-line::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.6),
+    transparent
+  );
+  transform: translateX(-100%);
+  animation: shimmer 2.4s infinite;
+}
+@keyframes shimmer {
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+.glow-accent {
+  box-shadow: 0 10px 40px -10px rgba(139, 92, 246, 0.55);
+}
+
+.text-gradient-accent {
+  background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 50%, #ec4899 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-soft {
+  background: linear-gradient(180deg, #ffffff 0%, #cbb6ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.cursor-blink::after {
+  content: "|";
+  color: var(--color-accent);
+  animation: blink 1s steps(2) infinite;
+  margin-left: 2px;
+}
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+.float-slow { animation: float 6s ease-in-out infinite; }
+.float-med  { animation: float 4.5s ease-in-out infinite; }
+.float-fast { animation: float 3.2s ease-in-out infinite; }
+
+/* GPU-only particle drift (no JS subscription per particle) */
+@keyframes particle-drift {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+    opacity: var(--p-op-min, 0.2);
+  }
+  50% {
+    transform: translate3d(0, -32px, 0);
+    opacity: var(--p-op-max, 0.6);
+  }
+}
+.particle {
+  position: absolute;
+  border-radius: 9999px;
+  will-change: transform, opacity;
+  animation: particle-drift var(--p-dur, 14s) ease-in-out infinite;
+  animation-delay: var(--p-delay, 0s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .particle,
+  .heading-line::after,
+  .float-slow,
+  .float-med,
+  .float-fast {
+    animation: none !important;
+  }
+}
+
+.tilt-card {
+  transform-style: preserve-3d;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
